@@ -99,15 +99,16 @@ namespace FSM
 		public StateMachine(bool needsExitTime = true, bool isGhostState = false)
 			: base(needsExitTime: needsExitTime, isGhostState: isGhostState)
 		{
-
+			
 		}
 
-		/// <summary>
-		/// Throws an exception if the state machine is not initialised yet.
-		/// </summary>
-		/// <param name="context">String message for which action the fsm should
-		/// 	be initialised for.</param>
-		private void EnsureIsInitializedFor(string context)
+        /// <summary>
+        /// Throws an exception if the state machine is not initialised yet.
+        /// </summary>
+        /// <param name="context">String message for which action the fsm should
+        /// 	be initialised for.</param>
+        [System.Diagnostics.Conditional("UNITY_ENGINE")]
+        private void EnsureIsInitializedFor(string context)
 		{
 			if (activeState == null)
 				throw new FSM.Exceptions.StateMachineNotInitializedException(context);
