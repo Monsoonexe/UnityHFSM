@@ -64,16 +64,16 @@ namespace FSM
 		private (TStateId state, bool isPending) pendingState = (default, false);
 
 		// Central storage of states
-		private Dictionary<TStateId, StateBundle> nameToStateBundle
+		private readonly Dictionary<TStateId, StateBundle> nameToStateBundle
 			= new Dictionary<TStateId, StateBundle>();
 
 		private StateBase<TStateId> activeState = null;
 		private List<TransitionBase<TStateId>> activeTransitions = noTransitions;
 		private Dictionary<TEvent, List<TransitionBase<TStateId>>> activeTriggerTransitions = noTriggerTransitions;
 
-		private List<TransitionBase<TStateId>> transitionsFromAny
+		private readonly List<TransitionBase<TStateId>> transitionsFromAny
 			= new List<TransitionBase<TStateId>>();
-		private Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerTransitionsFromAny
+		private readonly Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerTransitionsFromAny
 			= new Dictionary<TEvent, List<TransitionBase<TStateId>>>();
 
 		public StateBase<TStateId> ActiveState
@@ -84,6 +84,7 @@ namespace FSM
 				return activeState;
 			}
 		}
+		
 		public TStateId ActiveStateName => ActiveState.name;
 
 		private bool IsRootFsm => fsm == null;
@@ -593,21 +594,20 @@ namespace FSM
 			get
 			{
 				StateBase<TStateId> state = GetState(name);
-				StateMachine<string, string, string> subFsm = state as StateMachine<string, string, string>;
 
-				if (subFsm == null)
-				{
-					throw new System.InvalidOperationException(
-						FSM.Exceptions.ExceptionFormatter.Format(
-							context: "Getting a nested state machine with the indexer",
-							problem: "The selected state is not a state machine.",
-							solution: "This method is only there for quickly accessing a nested state machine. "
-								+ $"To get the selected state, use GetState(\"{name}\")."
-						)
-					);
-				}
+                if (!(state is StateMachine<string, string, string> subFsm))
+                {
+                    throw new System.InvalidOperationException(
+                        FSM.Exceptions.ExceptionFormatter.Format(
+                            context: "Getting a nested state machine with the indexer",
+                            problem: "The selected state is not a state machine.",
+                            solution: "This method is only there for quickly accessing a nested state machine. "
+                                + $"To get the selected state, use GetState(\"{name}\")."
+                        )
+                    );
+                }
 
-				return subFsm;
+                return subFsm;
 			}
 		}
 	}
