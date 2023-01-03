@@ -107,7 +107,7 @@ namespace FSM
         /// </summary>
         /// <param name="context">String message for which action the fsm should
         /// 	be initialised for.</param>
-        [System.Diagnostics.Conditional("UNITY_ENGINE")]
+        [System.Diagnostics.Conditional("UNITY_EDITOR")]
         private void EnsureIsInitializedFor(string context)
 		{
 			if (activeState == null)
