@@ -79,7 +79,7 @@ namespace FSM.Tests
 		public void Test_accessing_active_state_before_init_fails()
 		{
 			fsm.AddState("A");
-			StateBase<string> activeState;
+			IState<string> activeState;
 			Assert.Throws<FSM.Exceptions.StateMachineNotInitializedException>(() => activeState = fsm.ActiveState);
 		}
 
