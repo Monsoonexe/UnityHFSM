@@ -19,7 +19,7 @@ namespace FSM
 
 		void RequestStateChange(TStateId name, bool forceInstantly = false);
 
-		StateBase<TStateId> ActiveState { get; }
+		IState<TStateId> ActiveState { get; }
 		TStateId ActiveStateName { get; }
 	}
 }

@@ -13,8 +13,7 @@ namespace FSM
 	/// A finite state machine that can also be used as a state of a parent state machine to create
 	/// a hierarchy (-> hierarchical state machine)
 	/// </summary>
-	public class StateMachine<TOwnId, TStateId, TEvent> :
-		StateBase<TOwnId>,
+	public class StateMachine<TOwnId, TStateId, TEvent> : StateBase<TOwnId>,
 		ITriggerable<TEvent>,
 		IStateMachine<TStateId>,
 		IActionable<TEvent>
@@ -28,7 +27,7 @@ namespace FSM
 		{
 			// By default, these fields are all null and only get a value when you need them
 			// => Lazy evaluation => Memory efficient, when you only need a subset of features
-			public StateBase<TStateId> state;
+			public IState<TStateId> state;
 			public List<TransitionBase<TStateId>> transitions;
 			public Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerToTransitions;
 
@@ -67,7 +66,7 @@ namespace FSM
 		private readonly Dictionary<TStateId, StateBundle> nameToStateBundle
 			= new Dictionary<TStateId, StateBundle>();
 
-		private StateBase<TStateId> activeState = null;
+		private IState<TStateId> activeState = null;
 		private List<TransitionBase<TStateId>> activeTransitions = noTransitions;
 		private Dictionary<TEvent, List<TransitionBase<TStateId>>> activeTriggerTransitions = noTriggerTransitions;
 
@@ -76,7 +75,7 @@ namespace FSM
 		private readonly Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerTransitionsFromAny
 			= new Dictionary<TEvent, List<TransitionBase<TStateId>>>();
 
-		public StateBase<TStateId> ActiveState
+		public IState<TStateId> ActiveState
 		{
 			get
 			{
@@ -368,7 +367,7 @@ namespace FSM
 		/// </summary>
 		/// <param name="name">The name / identifier of the new state</param>
 		/// <param name="state">The new state instance, e.g. <c>State</c>, <c>CoState</c>, <c>StateMachine</c></param>
-		public void AddState(TStateId name, StateBase<TStateId> state)
+		public void AddState(TStateId name, IState<TStateId> state)
 		{
 			state.fsm = this;
 			state.name = name;
@@ -555,13 +554,13 @@ namespace FSM
 			TryTrigger(trigger);
 		}
 
-		public StateBase<TStateId> GetState(TStateId name)
+		public IState<TStateId> GetState(TStateId name)
 		{
 			StateBundle bundle;
 
 			if (!nameToStateBundle.TryGetValue(name, out bundle) || bundle.state == null)
 			{
-				throw new FSM.Exceptions.StateNotFoundException<TStateId>(name, "Getting a state");
+				throw new Exceptions.StateNotFoundException<TStateId>(name, "Getting a state");
 			}
 
 			return bundle.state;
@@ -594,7 +593,7 @@ namespace FSM
 		{
 			get
 			{
-				StateBase<TStateId> state = GetState(name);
+				IState<TStateId> state = GetState(name);
 
                 if (!(state is StateMachine<string, string, string> subFsm))
                 {

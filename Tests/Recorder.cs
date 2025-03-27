@@ -128,7 +128,7 @@ namespace FSM.Tests
         public RecorderQuery Expect => new RecorderQuery(this);
 
         // Creates a new StateBase whose OnEnter / OnLogic / OnExit events are tracked.
-        public StateBase<TStateId> TrackedState => Track(new StateBase<TStateId>(false));
+        public IState<TStateId> TrackedState => Track(new StateBase<TStateId>(false));
 
         public Recorder() {
             recordedEvents = new Queue<Event>();
@@ -151,7 +151,7 @@ namespace FSM.Tests
         public void RecordTransitionShouldTransition(TStateId from, TStateId to)
             => recordedEvents.Enqueue(new TransitionEvent(from, to, TransitionAction.SHOULD_TRANSITION));
 
-        public StateBase<TStateId> Track(StateBase<TStateId> state) {
+        public IState<TStateId> Track(IState<TStateId> state) {
             return tracker.Wrap(state);
         }
 
