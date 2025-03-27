@@ -107,9 +107,9 @@ namespace FSM
 
 		public override void OnExitRequest()
 		{
-			if (!needsExitTime || (canExit != null && canExit(this)))
+			if (!NeedsExitTime || (canExit != null && canExit(this)))
 			{
-				fsm.StateCanExit();
+				FSM.StateCanExit();
 			}
 		}
 	}

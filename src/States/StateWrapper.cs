@@ -33,7 +33,7 @@ namespace FSM
 					Action<IState<TStateId>> afterOnLogic = null,
 
 					Action<IState<TStateId>> beforeOnExit = null,
-					Action<IState<TStateId>> afterOnExit = null) : base(state.needsExitTime, state.isGhostState)
+					Action<IState<TStateId>> afterOnExit = null) : base(state.NeedsExitTime, state.IsGhostState)
 			{
 				this.state = state;
 
@@ -49,8 +49,8 @@ namespace FSM
 
 			public override void Init()
 			{
-				state.name = name;
-				state.fsm = fsm;
+				state.Name = Name;
+				state.FSM = FSM;
 
 				state.Init();
 			}

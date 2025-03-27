@@ -133,9 +133,9 @@ namespace FSM.Tests
         public Recorder() {
             recordedEvents = new Queue<Event>();
             tracker = new StateWrapper<TStateId, string>(
-                beforeOnEnter: s => RecordEnter(s.name),
-                beforeOnLogic: s => RecordLogic(s.name),
-                beforeOnExit: s => RecordExit(s.name)
+                beforeOnEnter: s => RecordEnter(s.Name),
+                beforeOnLogic: s => RecordLogic(s.Name),
+                beforeOnExit: s => RecordExit(s.Name)
             );
         }
 

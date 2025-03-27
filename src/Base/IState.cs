@@ -8,10 +8,10 @@
         void OnExitRequest();
         void OnLogic();
 
-        bool needsExitTime { get; set; }
-        bool isGhostState { get; set; }
-        TStateId name { get; set; }
+        bool NeedsExitTime { get; set; }
+        bool IsGhostState { get; set; }
+        TStateId Name { get; set; }
 
-        IStateMachine<TStateId> fsm { get; set; }
+        IStateMachine<TStateId> FSM { get; set; }
     }
 }

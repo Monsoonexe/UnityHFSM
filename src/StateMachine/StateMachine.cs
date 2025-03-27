@@ -84,9 +84,9 @@ namespace FSM
 			}
 		}
 		
-		public TStateId ActiveStateName => ActiveState.name;
+		public TStateId ActiveStateName => ActiveState.Name;
 
-		private bool IsRootFsm => fsm == null;
+		private bool IsRootFsm => FSM == null;
 
 		/// <summary>
 		/// Initialises a new instance of the StateMachine class
@@ -130,18 +130,18 @@ namespace FSM
 				ChangeState(state);
 			}
 
-			fsm?.StateCanExit();
+			FSM?.StateCanExit();
 		}
 
 		public override void OnExitRequest()
 		{
-			if (activeState.needsExitTime)
+			if (activeState.NeedsExitTime)
 			{
 				activeState.OnExitRequest();
 				return;
 			}
 
-			fsm?.StateCanExit();
+			FSM?.StateCanExit();
 		}
 
 		/// <summary>
@@ -178,7 +178,7 @@ namespace FSM
 				}
 			}
 
-			if (activeState.isGhostState) {
+			if (activeState.IsGhostState) {
 				TryAllDirectTransitions();
 			}
 		}
@@ -191,7 +191,7 @@ namespace FSM
 		/// therefore forcing an immediate state change</param>
 		public void RequestStateChange(TStateId name, bool forceInstantly = false)
 		{
-			if (!activeState.needsExitTime || forceInstantly)
+			if (!activeState.NeedsExitTime || forceInstantly)
 			{
 				ChangeState(name);
 			}
@@ -251,7 +251,7 @@ namespace FSM
 			if (!startState.hasState)
 			{
 				throw new System.InvalidOperationException(
-					FSM.Exceptions.ExceptionFormatter.Format(
+					global::FSM.Exceptions.ExceptionFormatter.Format(
 						context: "Running OnEnter of the state machine.",
 						problem: "No start state is selected. "
 							+ "The state machine needs at least one state to function properly.",
@@ -288,7 +288,7 @@ namespace FSM
 				TransitionBase<TStateId> transition = transitionsFromAny[i];
 
 				// Don't transition to the "to" state, if that state is already the active state
-				if (EqualityComparer<TStateId>.Default.Equals(transition.to, activeState.name))
+				if (EqualityComparer<TStateId>.Default.Equals(transition.to, activeState.Name))
 					continue;
 
 				if (TryTransition(transition))
@@ -369,8 +369,8 @@ namespace FSM
 		/// <param name="state">The new state instance, e.g. <c>State</c>, <c>CoState</c>, <c>StateMachine</c></param>
 		public void AddState(TStateId name, IState<TStateId> state)
 		{
-			state.fsm = this;
-			state.name = name;
+			state.FSM = this;
+			state.Name = name;
 			state.Init();
 
 			StateBundle bundle = GetOrCreateStateBundle(name);
@@ -509,7 +509,7 @@ namespace FSM
 				{
 					TransitionBase<TStateId> transition = triggerTransitions[i];
 
-					if (EqualityComparer<TStateId>.Default.Equals(transition.to, activeState.name))
+					if (EqualityComparer<TStateId>.Default.Equals(transition.to, activeState.Name))
 						continue;
 
 					if (TryTransition(transition))
@@ -598,7 +598,7 @@ namespace FSM
                 if (!(state is StateMachine<string, string, string> subFsm))
                 {
                     throw new System.InvalidOperationException(
-                        FSM.Exceptions.ExceptionFormatter.Format(
+                        global::FSM.Exceptions.ExceptionFormatter.Format(
                             context: "Getting a nested state machine with the indexer",
                             problem: "The selected state is not a state machine.",
                             solution: "This method is only there for quickly accessing a nested state machine. "

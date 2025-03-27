@@ -181,7 +181,7 @@ namespace FSM.Tests
 				{
 					if (condition)
 					{
-						state.fsm.StateCanExit();
+						state.FSM.StateCanExit();
 					}
 				}
 			)));
@@ -245,7 +245,7 @@ namespace FSM.Tests
 				{
 					if (condition)
 					{
-						state.fsm.StateCanExit();
+						state.FSM.StateCanExit();
 					}
 				}
 			));

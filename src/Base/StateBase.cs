@@ -6,11 +6,11 @@ namespace FSM
     /// </summary>
     public class StateBase<TStateId> : IState<TStateId>
     {
-        public bool needsExitTime { get; set; }
-        public bool isGhostState { get; set; }
-        public TStateId name { get; set; }
+        public bool NeedsExitTime { get; set; }
+        public bool IsGhostState { get; set; }
+        public TStateId Name { get; set; }
 
-        public IStateMachine<TStateId> fsm { get; set; }
+        public IStateMachine<TStateId> FSM { get; set; }
 
         /// <summary>
         /// Initialises a new instance of the BaseState class
@@ -24,8 +24,8 @@ namespace FSM
         /// 	and not wait until the next OnLogic call.</param>
         public StateBase(bool needsExitTime, bool isGhostState = false)
         {
-            this.needsExitTime = needsExitTime;
-            this.isGhostState = isGhostState;
+            this.NeedsExitTime = needsExitTime;
+            this.IsGhostState = isGhostState;
         }
 
         /// <summary>
