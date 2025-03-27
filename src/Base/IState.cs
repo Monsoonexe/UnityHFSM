@@ -1,6 +1,6 @@
 ﻿namespace FSM
 {
-    public interface IState<TStateId>
+    public interface IState
     {
         void Init();
         void OnEnter();
@@ -10,6 +10,10 @@
 
         bool NeedsExitTime { get; set; }
         bool IsGhostState { get; set; }
+    }
+
+    public interface IState<TStateId> : IState
+    {
         TStateId Name { get; set; }
 
         IStateMachine<TStateId> FSM { get; set; }
