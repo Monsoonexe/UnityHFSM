@@ -374,6 +374,12 @@ namespace FSM
 			state.Init();
 
 			StateBundle bundle = GetOrCreateStateBundle(name);
+
+			if (bundle.state != null)
+			{
+				throw new System.Exception($"A state with '{name}' already exists.");
+			}
+
 			bundle.state = state;
 
 			if (nameToStateBundle.Count == 1 && !startState.hasState)
