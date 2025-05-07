@@ -57,13 +57,14 @@ namespace FSM
 		private static TransitionBase<TStateId> CreateOptimizedTransition<TStateId>(
 			TStateId from,
 			TStateId to,
-			Func<Transition<TStateId>, bool> condition = null,
+            Func<Transition<TStateId>, bool> condition = null,
+            Action<Transition<TStateId>> onTransition = null,
 			bool forceInstantly = false)
 		{
-			if (condition == null)
+			if (condition == null && onTransition == null)
 				return new TransitionBase<TStateId>(from, to, forceInstantly);
 
-			return new Transition<TStateId>(from, to, condition, forceInstantly);
+			return new Transition<TStateId>(from, to, condition, onTransition, forceInstantly);
 		}
 
 		/// <summary>
@@ -76,9 +77,10 @@ namespace FSM
 			TStateId from,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition = null,
-			bool forceInstantly = false)
+			Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTransition(CreateOptimizedTransition(from, to, condition, forceInstantly));
+			fsm.AddTransition(CreateOptimizedTransition(from, to, condition, onTransition, forceInstantly));
 		}
 
 		/// <summary>
@@ -90,9 +92,10 @@ namespace FSM
 			this StateMachine<TOwnId, TStateId, TEvent> fsm,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition = null,
-			bool forceInstantly = false)
+            Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTransitionFromAny(CreateOptimizedTransition(default, to, condition, forceInstantly));
+			fsm.AddTransitionFromAny(CreateOptimizedTransition(default, to, condition, onTransition, forceInstantly));
 		}
 
 		/// <summary>
@@ -107,9 +110,10 @@ namespace FSM
 			TStateId from,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition = null,
-			bool forceInstantly = false)
+            Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTriggerTransition(trigger, CreateOptimizedTransition(from, to, condition, forceInstantly));
+			fsm.AddTriggerTransition(trigger, CreateOptimizedTransition(from, to, condition, onTransition, forceInstantly));
 		}
 
 		/// <summary>
@@ -123,9 +127,10 @@ namespace FSM
 			TEvent trigger,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition = null,
-			bool forceInstantly = false)
+            Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTriggerTransitionFromAny(trigger, CreateOptimizedTransition(default, to, condition, forceInstantly));
+			fsm.AddTriggerTransitionFromAny(trigger, CreateOptimizedTransition(default, to, condition, onTransition, forceInstantly));
 		}
 
 		/// <summary>
@@ -139,9 +144,10 @@ namespace FSM
 			TStateId from,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition,
-			bool forceInstantly = false)
+            Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTwoWayTransition(new Transition<TStateId>(from, to, condition, forceInstantly));
+			fsm.AddTwoWayTransition(new Transition<TStateId>(from, to, condition, onTransition, forceInstantly));
 		}
 
 		/// <summary>
@@ -156,9 +162,10 @@ namespace FSM
 			TStateId from,
 			TStateId to,
 			Func<Transition<TStateId>, bool> condition,
-			bool forceInstantly = false)
+            Action<Transition<TStateId>> onTransition = null,
+            bool forceInstantly = false)
 		{
-			fsm.AddTwoWayTriggerTransition(trigger, new Transition<TStateId>(from, to, condition, forceInstantly));
+			fsm.AddTwoWayTriggerTransition(trigger, new Transition<TStateId>(from, to, condition, onTransition, forceInstantly));
 		}
 	}
 }

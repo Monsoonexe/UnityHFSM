@@ -8,7 +8,8 @@ namespace FSM
 	public class Transition<TStateId> : TransitionBase<TStateId>
 	{
 
-		public Func<Transition<TStateId>, bool> condition;
+		private readonly Func<Transition<TStateId>, bool> condition;
+		private readonly Action<Transition<TStateId>> onTransition;
 
 		/// <summary>
 		/// Initialises a new instance of the Transition class
@@ -23,12 +24,20 @@ namespace FSM
 				TStateId from,
 				TStateId to,
 				Func<Transition<TStateId>, bool> condition = null,
-				bool forceInstantly = false) : base(from, to, forceInstantly)
+                Action<Transition<TStateId>> onTransition = null,
+                bool forceInstantly = false) : base(from, to, forceInstantly)
 		{
 			this.condition = condition;
+			this.onTransition = onTransition;
 		}
 
-		public override bool ShouldTransition()
+        protected override void OnTransition()
+        {
+			if (onTransition != null)
+				onTransition(this);
+        }
+
+        public override bool ShouldTransition()
 		{
 			if (condition == null)
 				return true;
@@ -43,7 +52,8 @@ namespace FSM
 			string @from,
 			string to,
 			Func<Transition<string>, bool> condition = null,
-			bool forceInstantly = false) : base(@from, to, condition, forceInstantly)
+                Action<Transition<string>> onTransition = null,
+            bool forceInstantly = false) : base(@from, to, condition, onTransition)
 		{
 		}
 	}
