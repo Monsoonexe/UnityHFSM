@@ -75,7 +75,11 @@ namespace FSM
 		private readonly Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerTransitionsFromAny
 			= new Dictionary<TEvent, List<TransitionBase<TStateId>>>();
 
-		public IState<TStateId> ActiveState
+		public event System.Action<IStateMachine<TStateId>> OnFsmEnter;
+        public event System.Action<IStateMachine<TStateId>> OnFsmExit;
+        public event System.Action<IState<TStateId>> OnStateChanged;
+
+        public IState<TStateId> ActiveState
 		{
 			get
 			{
@@ -178,7 +182,9 @@ namespace FSM
 				}
 			}
 
-			if (activeState.IsGhostState) {
+            OnStateChanged?.Invoke(activeState);
+
+            if (activeState.IsGhostState) {
 				TryAllDirectTransitions();
 			}
 		}
@@ -275,7 +281,9 @@ namespace FSM
 					transitions[i].OnEnter();
 				}
 			}
-		}
+
+			OnFsmEnter?.Invoke(this);
+        }
 
 		/// <summary>
 		/// Tries the "global" transitions that can transition from any state
@@ -342,7 +350,9 @@ namespace FSM
 				// a second time when the state machine enters again (and changes to the start state)
 				activeState = null;
 			}
-		}
+
+			OnFsmExit?.Invoke(this);
+        }
 
 		/// <summary>
 		/// Gets the StateBundle belonging to the <c>name</c> state "slot" if it exists.
