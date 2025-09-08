@@ -367,11 +367,11 @@ public static class HfsmAnimatorGraph
 	/// </remarks>
 	public interface IPreviewer
 	{
-		public void PreviewStateMachineInAnimator<TOwnId, TStateId, TEvent>(
+		void PreviewStateMachineInAnimator<TOwnId, TStateId, TEvent>(
 			StateMachine<TOwnId, TStateId, TEvent> fsm,
 			Animator animator);
 
-		public void PreviewStateMachineInAnimator(Animator animator);
+		void PreviewStateMachineInAnimator(Animator animator);
 	}
 
 	// Default implementation of the IPreviewer type. An interface is used in order to better encapsulate
@@ -552,3 +552,21 @@ public static class HfsmAnimatorGraph
 }
 }
 #endif
+
+public static class PleasePleaseDeleteME
+{
+	public static AnimatorTransition AddStateMachineTransition(string fromStateMachine, string toState)
+	{
+		return default;
+	}
+    public static U GetValueOrDefault<T, U>(this Dictionary<T, U> animatorStates, StateMachinePath fromPath, object obj)
+    {
+        return default;
+    }
+
+	public static void Deconstruct<T, U>(this KeyValuePair<T, U> tuple, out T Item1, out U Item2)
+	{
+		Item1 = tuple.Key;
+		Item2 = tuple.Value;
+	}
+}

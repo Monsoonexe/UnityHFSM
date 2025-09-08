@@ -102,12 +102,11 @@ namespace UnityHFSM.Inspection
 			if (other is null)
 				return false;
 
-			if (this.parentPath is null && other.parentPath is not null)
+			if (this.parentPath is null && !(other.parentPath is null))
 				return false;
 
-			if (this.parentPath is not null && other.parentPath is null)
+			if (!(this.parentPath is null) && other.parentPath is null)
 				return false;
-
 			if (!EqualityComparer<TStateId>.Default.Equals(this.name, other.name))
 				return false;
 
@@ -118,9 +117,11 @@ namespace UnityHFSM.Inspection
 		{
 			int ownHash = EqualityComparer<TStateId>.Default.GetHashCode(name);
 
+
 			return parentPath is null
 				? ownHash
-				: HashCode.Combine(parentPath.GetHashCode(), ownHash);
+				: 0;
+			//HashCode.Combine(parentPath.GetHashCode(), ownHash);
 		}
 	}
 
@@ -148,7 +149,7 @@ namespace UnityHFSM.Inspection
 
 		public bool Equals(RootStateMachinePath other)
 		{
-			return other is not null;
+			return !(other is null);
 		}
 
 		public override string ToString()
