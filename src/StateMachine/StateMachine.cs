@@ -126,7 +126,7 @@ namespace UnityHFSM
 
 		private (TStateId state, bool hasState) startState = (default, false);
 		private PendingTransition pendingTransition = default;
-		private readonly bool rememberLastState = false;
+		public bool rememberLastState = false;
 
 		// Central storage of states.
 		private readonly Dictionary<TStateId, StateBundle> stateBundlesByName
