@@ -10,6 +10,6 @@ namespace UnityHFSM.Inspection
 	{
 		void VisitStateMachine<TOwnId, TStateId, TEvent>(StateMachine<TOwnId, TStateId, TEvent> fsm);
 
-		void VisitRegularState<TStateId>(StateBase<TStateId> state);
+		void VisitRegularState<TStateId>(IState<TStateId> state);
 	}
 }

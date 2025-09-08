@@ -196,7 +196,7 @@ public static class HfsmAnimatorGraph
 			// Transitions are finally added in the ExitStateMachine() call.
 		}
 
-		public void VisitRegularState<TStateId>(StateMachinePath statePath, StateBase<TStateId> state)
+		public void VisitRegularState<TStateId>(StateMachinePath statePath, IState<TStateId> state)
 		{
 			var animator = animatorStateMachines[statePath.parentPath];
 

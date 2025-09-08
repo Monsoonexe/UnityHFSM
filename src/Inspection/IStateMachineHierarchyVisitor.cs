@@ -12,7 +12,7 @@ namespace UnityHFSM.Inspection
 
 		void VisitRegularState<TStateId>(
 			StateMachinePath statePath,
-			StateBase<TStateId> state);
+			IState<TStateId> state);
 
 		/// <summary>
 		/// Called after the current state machine and all its child states (and child state machines) have

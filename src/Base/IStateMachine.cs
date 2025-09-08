@@ -14,7 +14,7 @@ namespace UnityHFSM
 		/// The target state of a pending (delayed) transition. Returns null if no
 		/// transition is pending or when an exit transition is pending.
 		/// </summary>
-		StateBase<TStateId> PendingState { get; }
+		IState<TStateId> PendingState { get; }
 
 		/// <inheritdoc cref="PendingState"/>
 		TStateId PendingStateName { get; }
@@ -26,11 +26,11 @@ namespace UnityHFSM
 		/// Note that when a state is "active", the "ActiveState" may not return a reference to this state.
 		/// Depending on the classes used, it may for example return a reference to a wrapper state.
 		/// </remarks>
-		StateBase<TStateId> ActiveState { get; }
+		IState<TStateId> ActiveState { get; }
 
 		/// <inheritdoc cref="ActiveState"/>
 		TStateId ActiveStateName { get; }
 
-		StateBase<TStateId> GetState(TStateId name);
+		IState<TStateId> GetState(TStateId name);
 	}
 }

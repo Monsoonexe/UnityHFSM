@@ -1,6 +1,4 @@
 
-using System.Collections.Generic;
-
 namespace UnityHFSM.Inspection
 {
 	/// <summary>
@@ -41,7 +39,7 @@ namespace UnityHFSM.Inspection
 				path = path.parentPath;
 			}
 
-			public void VisitRegularState<TStateId>(StateBase<TStateId> state)
+			public void VisitRegularState<TStateId>(IState<TStateId> state)
 			{
 				var statePath = new StateMachinePath<TStateId>(path, state.name);
 				hierarchyVisitor.VisitRegularState(statePath, state);
@@ -64,7 +62,7 @@ namespace UnityHFSM.Inspection
 				fsm.ActiveState.AcceptVisitor(this);
 			}
 
-			public void VisitRegularState<TStateId>(StateBase<TStateId> state)
+			public void VisitRegularState<TStateId>(IState<TStateId> state)
 			{
 				activePath = new StateMachinePath<TStateId>(activePath, state.name);
 			}
@@ -77,7 +75,7 @@ namespace UnityHFSM.Inspection
 		{
 			public StateMachinePath path;
 
-			public StatePathExtractor(StateBase<TStartStateId> state)
+			public StatePathExtractor(IState<TStartStateId> state)
 			{
 				VisitParent(state.fsm);
 				state.AcceptVisitor(this);
@@ -106,7 +104,7 @@ namespace UnityHFSM.Inspection
 				}
 			}
 
-			public void VisitRegularState<TStateId>(StateBase<TStateId> state)
+			public void VisitRegularState<TStateId>(IState<TStateId> state)
 			{
 				AddToPath(state.name);
 			}
@@ -127,7 +125,7 @@ namespace UnityHFSM.Inspection
 		{
 			public string path;
 
-			public StringStatePathExtractor(StateBase<TStartStateId> state)
+			public StringStatePathExtractor(IState<TStartStateId> state)
 			{
 				VisitParent(state.fsm);
 				state.AcceptVisitor(this);
@@ -156,7 +154,7 @@ namespace UnityHFSM.Inspection
 				}
 			}
 
-			public void VisitRegularState<TStateId>(StateBase<TStateId> state)
+			public void VisitRegularState<TStateId>(IState<TStateId> state)
 			{
 				AddToPath(state.name);
 			}

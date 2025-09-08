@@ -6,13 +6,20 @@ namespace UnityHFSM
 	/// <summary>
 	/// The base class of all states.
 	/// </summary>
-	public class StateBase<TStateId> : IVisitableState
+	public class StateBase<TStateId> : IState<TStateId>, IVisitableState
 	{
 		public readonly bool needsExitTime;
 		public readonly bool isGhostState;
 		public TStateId name;
 
-		public IStateTimingManager fsm;
+		bool IState.needsExitTime { get => needsExitTime; }
+		bool IState.isGhostState { get => isGhostState; }
+		TStateId IState<TStateId>.name
+		{
+			get => name;
+			set => name = value;
+		}
+		public IStateTimingManager fsm { get; set; }
 
 		/// <summary>
 		/// Initialises a new instance of the StateBase class.

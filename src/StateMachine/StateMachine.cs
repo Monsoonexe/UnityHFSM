@@ -32,7 +32,7 @@ namespace UnityHFSM
 		{
 			// By default, these fields are all null and only get a value when you need them.
 			// => Lazy evaluation => Memory efficient, when you only need a subset of features
-			public StateBase<TStateId> state;
+			public IState<TStateId> state;
 			public List<TransitionBase<TStateId>> transitions;
 			public Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerToTransitions;
 
@@ -122,17 +122,17 @@ namespace UnityHFSM
 		/// It is triggered when the state machine enters its initial state, and after a transition is performed.
 		/// Note that it is not called when the state machine exits.
 		/// </remarks>
-		public event Action<StateBase<TStateId>> StateChanged;
+		public event Action<IState<TStateId>> StateChanged;
 
 		private (TStateId state, bool hasState) startState = (default, false);
 		private PendingTransition pendingTransition = default;
-		private bool rememberLastState = false;
+		private readonly bool rememberLastState = false;
 
 		// Central storage of states.
 		private readonly Dictionary<TStateId, StateBundle> stateBundlesByName
 			= new Dictionary<TStateId, StateBundle>();
 
-		private StateBase<TStateId> activeState = null;
+		private IState<TStateId> activeState = null;
 		private List<TransitionBase<TStateId>> activeTransitions = noTransitions;
 		private Dictionary<TEvent, List<TransitionBase<TStateId>>> activeTriggerTransitions = noTriggerTransitions;
 
@@ -141,7 +141,7 @@ namespace UnityHFSM
 		private readonly Dictionary<TEvent, List<TransitionBase<TStateId>>> triggerTransitionsFromAny
 			= new Dictionary<TEvent, List<TransitionBase<TStateId>>>();
 
-		public StateBase<TStateId> ActiveState
+		public IState<TStateId> ActiveState
 		{
 			get
 			{
@@ -153,10 +153,10 @@ namespace UnityHFSM
 		public TStateId ActiveStateName => ActiveState.name;
 
 		public TStateId PendingStateName => pendingTransition.targetState;
-		public StateBase<TStateId> PendingState => GetState(PendingStateName);
+		public IState<TStateId> PendingState => GetState(PendingStateName);
 		public bool HasPendingTransition => pendingTransition.isPending;
 
-		public IStateTimingManager ParentFsm => fsm;
+        public IStateTimingManager ParentFsm => fsm;
 
 		public bool IsRootFsm => fsm == null;
 
@@ -169,7 +169,7 @@ namespace UnityHFSM
 		/// <param name="rememberLastState">(Only for hierarchical states):
 		/// 	If true, the state machine will return to its last active state when it enters, instead
 		/// 	of to its original start state.</param>
-		/// <inheritdoc cref="StateBase{T}(bool, bool)"/>
+		/// <inheritdoc cref="IState{T}(bool, bool)"/>
 		public StateMachine(bool needsExitTime = false, bool isGhostState = false, bool rememberLastState = false)
 			: base(needsExitTime: needsExitTime, isGhostState: isGhostState)
 		{
@@ -509,7 +509,7 @@ namespace UnityHFSM
 		/// <param name="name">The name / identifier of the new state.</param>
 		/// <param name="state">The new state instance,
 		///		e.g. <see cref="State"/>, <see cref="CoState"/>, <see cref="StateMachine"/>.</param>
-		public void AddState(TStateId name, StateBase<TStateId> state)
+		public void AddState(TStateId name, IState<TStateId> state)
 		{
 			state.fsm = this;
 			state.name = name;
@@ -781,7 +781,7 @@ namespace UnityHFSM
 			(activeState as IActionable<TEvent>)?.OnAction<TData>(trigger, data);
 		}
 
-		public StateBase<TStateId> GetState(TStateId name)
+		public IState<TStateId> GetState(TStateId name)
 		{
 			StateBundle bundle;
 
@@ -801,7 +801,7 @@ namespace UnityHFSM
 		{
 			get
 			{
-				StateBase<TStateId> state = GetState(name);
+				IState state = GetState(name);
 				StateMachine<string, string, string> subFsm = state as StateMachine<string, string, string>;
 
 				if (subFsm == null)
@@ -837,7 +837,7 @@ namespace UnityHFSM
 
 		/// <summary>Returns a list of all currently defined states.</summary>
 		/// <remarks>Warning: this is an expensive operation.</remarks>
-		public IReadOnlyList<StateBase<TStateId>> GetAllStates()
+		public IReadOnlyList<IState<TStateId>> GetAllStates()
 		{
 			return stateBundlesByName.Values
 				.Where(bundle => bundle.state != null)
